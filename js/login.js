@@ -1,5 +1,4 @@
 $(function () {
-    console.log('我导入成功了');
     // 点击去注册账号
     $('#link_reg').on('click',function() {
         $('.login-box').hide();
@@ -64,7 +63,6 @@ $(function () {
             success: function(res){
                 console.log(res);
                 if(res.status != 0){
-                    // return console.log(res.message);
                     return layer.msg('登录失败');
                 }
                 layer.msg('登录成功！');

@@ -28,12 +28,11 @@ function getUserInfo() {
         // 这里的 headers 请求头放到了 baseAPI.js 中
         // 像 login.js 中的请求 URL地址拼接一样麻烦，就封装到了 baseAPI.js 中
         success: function(res){
-            console.log(res);
             if(res.status != 0){
                 // return console.log(res.message);
                 return layer.msg('获取用户基本信息失败');
             }
-            console.log('获取用户基本信息成功！');
+            console.log(res);
             // 调用 renderAvatar 渲染用户头像
             renderAvatar(res.data);
         },
