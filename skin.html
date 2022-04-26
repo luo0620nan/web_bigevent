@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <!-- 引入刚刚下载的 ECharts 文件 -->
+    <style>
+        #body {
+            display: flex;
+            margin-bottom: 40px;
+            border-bottom: 20px solid rgb(227, 225, 225);
+        }
+
+        #main {
+            margin-left: 20px;
+            border-right: 20px solid rgb(227, 225, 225);
+        }
+
+        #regss {
+            padding-top: 40px;
+            margin-left: 60px;
+        }
+
+        button {
+            margin: 10px 0 0 0px !important;
+        }
+        #but {
+            margin-left: 40px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="body">
+        <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+        <div id="main" style="width: 800px;height:600px;"></div>
+        <div id="body-text">
+            <div id="text">
+                <button class="layui-btn layui-btn-normal" id="but">总文章数</button>
+                <button class="layui-btn layui-btn-primary">1023456篇</button>
+                <button class="layui-btn layui-btn-normal" id="but">日浏览量</button>
+                <button class="layui-btn layui-btn-primary">23456篇</button> <br>
+                <button class="layui-btn layui-btn-normal" id="but">日新增文章</button>
+                <button class="layui-btn layui-btn-primary">13456篇</button>
+                <button class="layui-btn layui-btn-normal" id="but">日新增评论</button>
+                <button class="layui-btn layui-btn-primary">93456篇</button> <br>
+                <div id="regss" style="width: 500px;height:400px;"></div>
+            </div>
+        </div>
+        
+    </div>
+    <div id="bottom" style="width: 1300px;height:600px;"></div>
+</body>
+<script src="js/jQuery-3.6.0.js"></script>
+<script src="./echarts/dist/echarts.min.js"></script>
+<script type="text/javascript">
+    // var echarts = require('echarts');
+
+
+    var ROOT_PATH =
+        'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/examples';
+
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    $.get(ROOT_PATH + '/data/asset/data/aqi-beijing.json', function (data) {
+        myChart.setOption(
+            (option = {
+                title: {
+                    text: '月新增',
+                    left: '1%'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    left: '5%',
+                    right: '15%',
+                    bottom: '10%'
+                },
+                xAxis: {
+                    data: data.map(function (item) {
+                        return item[0];
+                    })
+                },
+                yAxis: {},
+                toolbox: {
+                    right: 10,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                dataZoom: [
+                    {
+                        startValue: '2014-06-01'
+                    },
+                    {
+                        type: 'inside'
+                    }
+                ],
+                visualMap: {
+                    top: 50,
+                    right: 10,
+                    pieces: [
+                        {
+                            gt: 0,
+                            lte: 50,
+                            color: '#93CE07'
+                        },
+                        {
+                            gt: 50,
+                            lte: 100,
+                            color: '#FBDB0F'
+                        },
+                        {
+                            gt: 100,
+                            lte: 150,
+                            color: '#FC7D02'
+                        },
+                        {
+                            gt: 150,
+                            lte: 200,
+                            color: '#FD0100'
+                        },
+                        {
+                            gt: 200,
+                            lte: 300,
+                            color: '#AA069F'
+                        },
+                        {
+                            gt: 300,
+                            color: '#AC3B2A'
+                        }
+                    ],
+                    outOfRange: {
+                        color: '#999'
+                    }
+                },
+                series: {
+                    name: 'Beijing AQI',
+                    type: 'line',
+                    data: data.map(function (item) {
+                        return item[1];
+                    }),
+                    markLine: {
+                        silent: true,
+                        lineStyle: {
+                            color: '#333'
+                        },
+                        data: [
+                            {
+                                yAxis: 50
+                            },
+                            {
+                                yAxis: 100
+                            },
+                            {
+                                yAxis: 150
+                            },
+                            {
+                                yAxis: 200
+                            },
+                            {
+                                yAxis: 300
+                            }
+                        ]
+                    }
+                }
+            })
+        );
+    });
+
+    option && myChart.setOption(option);
+
+
+    var chartDo = document.getElementById('regss');
+    var myChar = echarts.init(chartDo);
+    var optio;
+
+    optio = {
+        legend: {
+            top: 'top'
+        },
+        series: [
+            {
+                name: 'Nightingale Chart',
+                type: 'pie',
+                radius: [40, 160],
+                center: ['50%', '65%'],
+                roseType: 'area',
+                itemStyle: {
+                    borderRadius: 4
+                },
+                data: [
+                    { value: 40, name: '奇趣事' },
+                    { value: 38, name: '惠生活' },
+                    { value: 32, name: '爱旅行' },
+                    { value: 30, name: '趣美味' },
+                    { value: 28, name: '爱美妆' },
+                    { value: 26, name: '惠吃喝' },
+                    { value: 22, name: '竞体育' },
+                    { value: 18, name: '惠穿搭' }
+                ]
+            }
+        ]
+    };
+
+    optio && myChar.setOption(optio);
+
+    var ROOT_PATH =
+        'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/examples';
+
+    var chartD = document.getElementById('bottom');
+    var myCha = echarts.init(chartD);
+    var opti;
+
+    $.get(
+        ROOT_PATH + '/data/asset/data/life-expectancy-table.json',
+        function (data) {
+            var sizeValue = '57%';
+            var symbolSize = 2.5;
+            opti = {
+                title: {
+                    text: '历年总数据',
+                    left: 'center'
+                },
+                legend: {},
+                tooltip: {},
+                toolbox: {
+                    left: 'right',
+                    feature: {
+                        dataZoom: {}
+                    }
+                },
+                grid: [
+                    { right: sizeValue, bottom: sizeValue },
+                    { left: sizeValue, bottom: sizeValue },
+                    { right: sizeValue, top: sizeValue },
+                    { left: sizeValue, top: sizeValue }
+                ],
+                xAxis: [
+                    {
+                        type: 'value',
+                        gridIndex: 0,
+                        name: 'Income',
+                        axisLabel: { rotate: 50, interval: 0 }
+                    },
+                    {
+                        type: 'category',
+                        gridIndex: 1,
+                        name: 'Country',
+                        boundaryGap: false,
+                        axisLabel: { rotate: 50, interval: 0 }
+                    },
+                    {
+                        type: 'value',
+                        gridIndex: 2,
+                        name: 'Income',
+                        axisLabel: { rotate: 50, interval: 0 }
+                    },
+                    {
+                        type: 'value',
+                        gridIndex: 3,
+                        name: 'Life Expectancy',
+                        axisLabel: { rotate: 50, interval: 0 }
+                    }
+                ],
+                yAxis: [
+                    { type: 'value', gridIndex: 0, name: 'Life Expectancy' },
+                    { type: 'value', gridIndex: 1, name: 'Income' },
+                    { type: 'value', gridIndex: 2, name: 'Population' },
+                    { type: 'value', gridIndex: 3, name: 'Population' }
+                ],
+                dataset: {
+                    dimensions: [
+                        'Income',
+                        'Life Expectancy',
+                        'Population',
+                        'Country',
+                        { name: 'Year', type: 'ordinal' }
+                    ],
+                    source: data
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        symbolSize: symbolSize,
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        encode: {
+                            x: 'Income',
+                            y: 'Life Expectancy',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'scatter',
+                        symbolSize: symbolSize,
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        encode: {
+                            x: 'Country',
+                            y: 'Income',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'scatter',
+                        symbolSize: symbolSize,
+                        xAxisIndex: 2,
+                        yAxisIndex: 2,
+                        encode: {
+                            x: 'Income',
+                            y: 'Population',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    },
+                    {
+                        type: 'scatter',
+                        symbolSize: symbolSize,
+                        xAxisIndex: 3,
+                        yAxisIndex: 3,
+                        encode: {
+                            x: 'Life Expectancy',
+                            y: 'Population',
+                            tooltip: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ]
+            };
+            myCha.setOption(opti);
+        }
+    );
+
+    opti && myCha.setOption(opti);
+
+</script>
+
+</html>
